@@ -1,1 +1,1 @@
-Testing... This is my assigment-1 submission!
+This is my assigment-1 submission!
