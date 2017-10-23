@@ -9,6 +9,6 @@
 #define TESTCARD "steward"
 
 int main() {
-	printf("CardTEst3\n");
+	printf("TESTING mine card:\n");
 	return 0;
 }

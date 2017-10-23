@@ -50,29 +50,29 @@ cardtest4: cardtest4.c dominion.o rngs.o
 
 runtests: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
 	./unittest1 >> unittest1result.out
-	gcov dominion.c -b -f >> unittest1result.out
-	cat dominion.c.gcov >> unittest1result.out
-	./unittest2 >> unittest2result.out
-	gcov dominion.c -b -f >> unittest2result.out
-	cat dominion.c.gcov >> unittest2result.out
-	./unittest3 >> unittest3result.out
-	gcov dominion.c -b -f >> unittest3result.out
-	cat dominion.c.gcov >> unittest3result.out
-	./unittest4 >> unittest4result.out
-	gcov dominion.c -b -f >> unittest4result.out
-	cat dominion.c.gcov >> unittest4result.out
-	./cardtest1 >> cardtest1.out
-	gcov dominion.c -b -f >> cardtest1result.out
-	cat dominion.c.gcov >> cardtest1result.out
-	./cardtest2 >> cardtest2.out
-	gcov dominion.c -b -f >> cardtest2result.out
-	cat dominion.c.gcov >> cardtest2result.out
-	./cardtest3 >> cardtest3.out
-	gcov dominion.c -b -f >> cardtest3result.out
-	cat dominion.c.gcov >> cardtest3result.out
-	./cardtest4 >> cardtest4.out
-	gcov dominion.c -b -f >> cardtest4result.out
-	cat dominion.c.gcov >> cardtest4result.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	./unittest2 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	./unittest3 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	./unittest4 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	./cardtest1 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	./cardtest2 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	./cardtest3 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	./cardtest4 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)

@@ -6,9 +6,9 @@
 #include "rngs.h"
 #include <stdlib.h>
 
-#define TESTCARD "steward"
+#define TESTCARD "adventurer"
 
 int main() {
-	printf("CardTEst2\n");
+	printf("TESTING adventurer card:\n");
 	return 0;
 }
