@@ -43,7 +43,8 @@ int main() {
 	
 	int currHandCards = state.handCount[currentPlayer];
 	int originalHandCards = stateOriginal.handCount[currentPlayer];
-	int newCards = currHandCards - originalHandCards;
+	//add 1 to account for the discarded smithy card
+	int newCards = currHandCards - originalHandCards + 1;
 	checkEqual(newCards, 3);
 	printf("Number of new cards = %d, expected %d\n", newCards, 3);
 	
