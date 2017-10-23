@@ -45,9 +45,6 @@ void checkEqual(int i, int j) {
 	}
 }
 
-// set NOISY_TEST to 0 to remove printfs from output
-#define NOISY_TEST 1
-
 int main() {
 	int numPlayers = 2;
 	int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
