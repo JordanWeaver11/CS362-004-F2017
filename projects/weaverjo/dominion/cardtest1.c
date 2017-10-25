@@ -16,6 +16,17 @@ void checkEqual(int i, int j) {
 	}
 }
 
+//compares two ints and prints PASS if !=, FAIL if ==
+void checkDiff(int i, int j) {
+	if(i != j) {
+		printf("PASS: ");
+	}
+	else {
+		printf("FAIL: ");
+	}
+}
+
+
 #define TESTCARD "simthy"
 
 int main() {
@@ -31,6 +42,12 @@ int main() {
 	initializeGame(numPlayers, k, randseed, &state);
 	//add smithy to currentPlayer's hand
 	state.hand[currentPlayer][0] = smithy;
+	//printf("Number of cards in player 2's hand = %d\n", state.handCount[otherPlayer]);
+	//printf("Number of cards in player 1's hand = %d\n", state.handCount[currentPlayer]);
+	//make sure that player 2 has cards in his hand
+	for (i = 0; i < 5; i++){
+		drawCard(otherPlayer, &state);
+	}
 	//make a copy of the state to compare to
 	memcpy(&stateOriginal, &state, sizeof(struct gameState));
 	
@@ -48,11 +65,12 @@ int main() {
 	checkEqual(newCards, 3);
 	printf("Number of new cards = %d, expected %d\n", newCards, 3);
 	
-	//test2: 3 cards come from current player's pile
+	//test2: cards come from current player's pile
 	int currDeckCards = state.deckCount[currentPlayer];
 	int originalDeckCards = stateOriginal.deckCount[currentPlayer];
-	checkEqual(originalDeckCards - currDeckCards, 3);
-	printf("Number of cards drawn from current player's deck = %d, expected %d\n", originalDeckCards - currDeckCards, 3);
+	checkDiff(originalDeckCards, currDeckCards);
+	printf("Did the cards come from the current player's pile (True/False) = %d, expected %d\n", (originalDeckCards != currDeckCards), 1);
+	
 	//test3: state stays the same for other players
 	int flag = 0;
 	
@@ -72,17 +90,18 @@ int main() {
 		}
     }
     checkEqual(flag, 0);
-    printf("Was other player's state affected = %d, expected %d\n", flag, 0);
-    
-    flag = 0;
+    printf("Was other player's state affected (True/False) = %d, expected %d\n", flag, 0);
     
 	//test4: no changes to victory cards or kingdom cards
+    flag = 0;
 	for( i = 0; i < great_hall + 1; i++) {
 		if(supplyCount(i, &state) != supplyCount(i, &stateOriginal)) {
 			flag = 1;
 		}
 	}
 	checkEqual(flag, 0);
-	printf("Were supply counts changed = %d, expected %d\n", flag, 0);
+	printf("Were supply counts changed (True/False) = %d, expected %d\n", flag, 0);
+	
+	printf("DONE testing smithy card\n\n");
 	return 0;
 }
