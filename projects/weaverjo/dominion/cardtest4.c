@@ -55,9 +55,57 @@ int main() {
 	//test1: player gets exactly 1 card
 	int oldHandCount = stateOriginal.handCount[currentPlayer];
 	int newHandCount = state.handCount[currentPlayer];
-	//card comes from players deck
-	//other players are not affected
-	//add exactly 2 actions to this player's turn
-	printf("TESTING village\n");
+	//add 1 for the discarded village card
+	int drawnCards = (newHandCount - oldHandCount) + 1;
+	checkEqual(drawnCards, 1);
+	printf("Player drew exactly %d card, expected %d\n", drawnCards, 1);
+	
+	//test2: card comes from players deck
+	int oldDeckCount = stateOriginal.deckCount[currentPlayer];
+	int newDeckCount = state.deckCount[currentPlayer];
+	//the new deck should have 1 less card than the old deck
+	checkEqual(oldDeckCount - newDeckCount, 1);
+	printf("Card came from the player's deck (True/False) = %d, expected %d\n", (oldDeckCount - newDeckCount) == 1, 1);
+	
+	//test3: other players are not affected
+	int flag = 0;
+	
+	for (i = 0; i < state.deckCount[nextPlayer]; i++) {
+		if(state.deck[nextPlayer][i] != stateOriginal.deck[nextPlayer][i]) {
+			flag = 1;
+		}
+    }
+	for (i = 0; i < state.handCount[nextPlayer]; i++) {
+		if(state.hand[nextPlayer][i] != stateOriginal.hand[nextPlayer][i]) {
+			flag = 1;
+		}
+    }
+   	for (i = 0; i < state.discardCount[nextPlayer]; i++) {
+		if(state.discard[nextPlayer][i] != stateOriginal.discard[nextPlayer][i]) {
+			flag = 1;
+		}
+    }
+    checkEqual(flag, 0);
+    printf("Was other player's state affected (True/False) = %d, expected %d\n", flag, 0);
+    
+	//test4: add exactly 2 actions to this player's turn
+	int oldNumActions = stateOriginal.numActions;
+	int newNumActions = state.numActions;
+	//after playing the village card, the player will have 2 remaining actions
+	//the new number of actions should be 1 greater than the old number of actions
+	checkEqual(newNumActions - oldNumActions, 1);
+	printf("Village added %d actions to current players turn, expected %d actions added\n", (newNumActions - oldNumActions) + 1, 2);
+	
+    //test5: no change to supply cards
+    flag = 0;
+	for( i = 0; i < great_hall + 1; i++) {
+		if(supplyCount(i, &state) != supplyCount(i, &stateOriginal)) {
+			flag = 1;
+		}
+	}
+	checkEqual(flag, 0);
+	printf("Were supply cards changed (True/False) = %d, expected %d\n", flag, 0);
+	
+	printf("DONE testing village\n\n");
 	return 0;
 }

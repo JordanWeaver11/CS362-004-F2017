@@ -149,6 +149,6 @@ int main() {
 	checkEqual(flag, 0);
 	printf("Were supply cards changed (True/False) = %d, expected %d\n", flag, 0);
 	
-	printf("DONE testing adventurer card\n");
+	printf("DONE testing adventurer card\n\n");
 	return 0;
 }
