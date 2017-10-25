@@ -49,7 +49,7 @@ cardtest4: cardtest4.c dominion.o rngs.o
 	gcc -o cardtest4 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
 
 runtests: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
-	./unittest1 >> unittestresult.out
+	./unittest1 >> unittestresults.out
 	gcov dominion.c -b -f >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
 	rm -f dominion.gcda

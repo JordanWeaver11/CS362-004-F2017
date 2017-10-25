@@ -80,7 +80,7 @@ int main() {
 	//choice1 = 2 chooses the estate at handpos2 to trash
     int handpos = 0, choice1 = 2, choice2 = silver, choice3 = 0, bonus = 0;
     //the played mine card is discarded!
-	int ret = cardEffect(mine, choice1, choice2, choice3, &state, handpos, &bonus);
+	int ret = playCard(handpos, choice1, choice2, choice3, &state);
 	checkEqual((ret < 0), 1);
 	printf("return value from cardEffect if trashing something other than treasure = %d\n", ret);
 	printf("\texpected < %d (error value)\n", 0);
@@ -94,7 +94,7 @@ int main() {
 	 */
 	//choice1 = 1 chooses the copper at at handpos1 to trash
     handpos = 0, choice1 = 1, choice2 = silver, choice3 = 0, bonus = 0;
-    cardEffect(mine, choice1, choice2, choice3, &state, handpos, &bonus);
+    playCard(handpos, choice1, choice2, choice3, &state);
     //number of copper cards in old hand
     int oldCopper = cardHandCount(currentPlayer, copper, &stateOriginal);
     //number of copper cards in new hand
@@ -122,7 +122,7 @@ int main() {
 	//choice1 = 1 chooses the copper at handpos1 to trash
     handpos = 0, choice1 = 1, choice2 = silver, choice3 = 0, bonus = 0;
     //the played mine card is discarded!
-	ret = cardEffect(mine, choice1, choice2, choice3, &state, handpos, &bonus);
+	ret = playCard(handpos, choice1, choice2, choice3, &state);
 	checkEqual(ret, 0);
 	printf("returns normally if treasure costs exactly 3 more (True/False) = %d\n", (ret == 0));
 	printf("\texpected %d\n", 1);
@@ -137,7 +137,7 @@ int main() {
 	//choice1 = 1 chooses the copper at handpos1 to trash
     handpos = 0, choice1 = 1, choice2 = copper, choice3 = 0, bonus = 0;
     //the played mine card is discarded!
-	ret = cardEffect(mine, choice1, choice2, choice3, &state, handpos, &bonus);
+	ret = playCard(handpos, choice1, choice2, choice3, &state);
 	checkEqual(ret, 0);
 	printf("returns normally if treasure costs less than 3 more (True/False) = %d\n", (ret == 0));
 	printf("\texpected %d\n", 1);
@@ -152,7 +152,7 @@ int main() {
 	//choice1 = 1 chooses the copper at handpos1 to trash
     handpos = 0, choice1 = 1, choice2 = gold, choice3 = 0, bonus = 0;
     //the played mine card is discarded!
-	ret = cardEffect(mine, choice1, choice2, choice3, &state, handpos, &bonus);
+	ret = playCard(handpos, choice1, choice2, choice3, &state);
 	checkEqual((ret < 0), 1);
 	printf("returns error if treasure costs more than 3 more (True/False) = %d\n", (ret < 0));
 	printf("\texpected %d\n", 1);
@@ -167,7 +167,7 @@ int main() {
 	//choice1 = 1 chooses the copper at handpos1 to trash
     handpos = 0, choice1 = 1, choice2 = silver, choice3 = 0, bonus = 0;
     //the played mine card is discarded!
-	cardEffect(mine, choice1, choice2, choice3, &state, handpos, &bonus);
+	playCard(handpos, choice1, choice2, choice3, &state);
 	//old number of silver cards in hand
 	int oldSilver = cardHandCount(currentPlayer, silver, &stateOriginal);
 	//new number of silver cards in hand

@@ -50,7 +50,7 @@ int main() {
 	
 	//initialize values to use in cardEffect()
     int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
-	cardEffect(village, choice1, choice2, choice3, &state, handpos, &bonus);  //the played village card is discarded!
+	playCard(handpos, choice1, choice2, choice3, &state);  //the played village card is discarded!
 	
 	//test1: player gets exactly 1 card
 	int oldHandCount = stateOriginal.handCount[currentPlayer];

@@ -65,7 +65,7 @@ int main() {
 	
 	//initialize values to use in cardEffect()
     int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
-	cardEffect(adventurer, choice1, choice2, choice3, &state, handpos, &bonus);  //the played adventurer card is discarded!
+	playCard(handpos, choice1, choice2, choice3, &state);  //the played adventurer card is discarded!
 	
 	//test1: exactly 2 treasure cards drawn
 	int oldNumTreasures = countTreasure(currentPlayer, &stateOriginal);
@@ -106,7 +106,7 @@ int main() {
 	//make a new original copy of the game
 	memcpy(&stateOriginal, &state, sizeof(struct gameState));
 	//play the card
-	cardEffect(adventurer, choice1, choice2, choice3, &state, handpos, &bonus);  //the played adventurer card is discarded!
+	playCard(handpos, choice1, choice2, choice3, &state);  //the played adventurer card is discarded!
 	
 	//make sure that the deck count does not become greater than the original discard count
 	//find original discard count
