@@ -49,7 +49,8 @@ int myAssertDiff(int given, int expected) {
 #define TESTCARD "simthy"
 
 int main() {
-	printf("TESTING simthy card:\n");
+	//parallel structure to the betterTestDrawCard.c example
+	printf("TESTING village card:\n");
 	//p = current player
 	int i = 0, p = 0;
 	int numPlayers = 2;
@@ -90,6 +91,9 @@ int main() {
 			//make a copy of the game state
 			memcpy(&stateOriginal, &state, sizeof(struct gameState));
 			
+			printf("Testing Gamestate: deckCount = %d, handCount = %d, discardCount = %d\n",
+					stateOriginal.deckCount[p], stateOriginal.handCount[p], stateOriginal.discardCount[p]);
+			
 			//get ready to play the smithy card
 			state.whoseTurn = p;
 			state.phase = 0; //action phase
@@ -101,17 +105,15 @@ int main() {
 			//not enough cards to draw
 			if((discardCount + deckCount) < 3) {
 				if(!myAssert(newHandCount, oldHandCount + discardCount + deckCount - 1)) { //-1 for the discarded smithy card
-					printf("\ttest1: deckCount = %d, handCount = %d, discardCount = %d\n",
-							stateOriginal.deckCount[p], stateOriginal.handCount[p], stateOriginal.discardCount[p]);
-							testFlags[0] = 1;
+					printf("\tsee test1\n");
+					testFlags[0] = 1;
 				}
 			}
 			//enough cards to draw
 			else {
 				if(!myAssert(newHandCount, oldHandCount + 2)) { //-1 for the discarded smithy card
-				printf("\ttest1: deckCount = %d, handCount = %d, discardCount = %d\n",
-						stateOriginal.deckCount[p], stateOriginal.handCount[p], stateOriginal.discardCount[p]);
-						testFlags[0] = 1;
+					printf("\tsee test1\n");
+					testFlags[0] = 1;
 				}
 			}
 			
@@ -119,9 +121,8 @@ int main() {
 			int newDeckCards = state.deckCount[p];
 			int oldDeckCards = stateOriginal.deckCount[p];
 			if(!myAssertDiff(newDeckCards, oldDeckCards)) {
-				printf("\ttest2: deckCount = %d, handCount = %d, discardCount = %d\n",
-						stateOriginal.deckCount[p], stateOriginal.handCount[p], stateOriginal.discardCount[p]);
-						testFlags[1] = 1;
+					printf("\tsee test2\n");
+					testFlags[1] = 1;
 				}
 
 			//TEST3: state stays the same for other players
@@ -143,10 +144,9 @@ int main() {
 				}
 			}
 			if(!myAssert(flag, 0)) {
-				printf("\ttest3: deckCount = %d, handCount = %d, discardCount = %d\n",
-						stateOriginal.deckCount[p], stateOriginal.handCount[p], stateOriginal.discardCount[p]);
-						testFlags[2] = 1;
-				}
+				printf("\tsee test3\n");
+				testFlags[2] = 1;
+			}
 			
 			//TEST4: no changes to victory cards or kingdom cards
 			flag = 0;
@@ -156,10 +156,9 @@ int main() {
 				}
 			}
 			if(!myAssert(flag, 0)) {
-				printf("\ttest4: deckCount = %d, handCount = %d, discardCount = %d\n",
-						stateOriginal.deckCount[p], stateOriginal.handCount[p], stateOriginal.discardCount[p]);
-						testFlags[3] = 1;
-				}
+				printf("\tsee test4\n");
+				testFlags[3] = 1;
+			}
 			
 		} //end handCount loop
 		} //end discardCount loop
@@ -178,6 +177,6 @@ int main() {
 		}
 	}
 	
-	printf("DONE testing smithy card\n\n");
+	printf("DONE testing village card\n\n");
 	return 0;
 }
