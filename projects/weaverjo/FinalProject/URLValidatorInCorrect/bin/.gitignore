@@ -3,6 +3,7 @@
 /.settings/
 /DomainValidator.class
 /InetAddressValidator.class
+/README.md
 /RegexValidator.class
 /ResultPair.class
 /UrlValidator.class
