@@ -151,8 +151,10 @@ int main() {
 			//make a copy of the game state
 			memcpy(&stateOriginal, &state, sizeof(struct gameState));
 			
+			/*
 			printf("END Testing Gamestate: deckCount = %d, treasureDeckCount = %d, discardCount = %d, treasureDiscardCount = %d\nhandCount = %d, treasureHandCount = %d treasureType = %d, player = %d\n",
 					stateOriginal.deckCount[p], treasureDeckCount, stateOriginal.discardCount[p], treasureDiscardCount, stateOriginal.handCount[p], treasureHandCount, treasureType, p);
+			*/
 			
 			//get ready to play the adventurer card
 			state.whoseTurn = p;
@@ -180,8 +182,8 @@ int main() {
 			//find the number of cards added to currentPlayer's hand
 			int totalDrawn = state.handCount[p] - stateOriginal.handCount[p];
 			//printf("New handcount = %d, old hand count = %d\n", state.handCount[currentPlayer], stateOriginal.handCount[currentPlayer]);  //DEBUG
-			//-2 for drawn treasures
-			if(!myAssert(totalDrawn - 2, discardedDrawn)) {
+			//+2 for drawn treasures
+			if(!myAssert(totalDrawn, discardedDrawn + 2)) {
 				printf("\tsee test2\n");
 				testFlags[1] = 1;
 			}
@@ -198,7 +200,9 @@ int main() {
 				testFlags[2] = 1;
 			}
 			
+			
 			//TEST4: state stays the same for other players
+			int nextPlayer = !p;
 			int flag = 0;
 			
 			for (i = 0; i < state.deckCount[nextPlayer]; i++) {
@@ -224,7 +228,7 @@ int main() {
 			
 			
 			//TEST5: no change to supply cards
-			int flag = 0;
+			flag = 0;
 			for( i = 0; i < great_hall + 1; i++) {
 				if(supplyCount(i, &state) != supplyCount(i, &stateOriginal)) {
 					flag = 1;
@@ -250,8 +254,8 @@ int main() {
 	//print overall results
 	printf("Summary:\n");
 	for(i = 0; i < 5; i++) {
-		//int failed = testFlags[i];
-		int failed = 0;
+		int failed = testFlags[i];
+		//int failed = 0;
 		if(failed) {
 			printf("test #%d FAILED in at least 1 random iteration!\n", i + 1);
 		}
