@@ -5,8 +5,61 @@
 #include <assert.h>
 #include "rngs.h"
 #include <stdlib.h>
+#include <time.h>
 
 #define TESTCARD "adventurer"
+
+
+//generates a random number between [low, high]
+int genRand(int low, int high) {
+	if(high == 0) {
+		return 0;
+	}
+	return rand() % (high + 1 - low) + low;
+}
+
+
+/*
+//generates a random number between [0, high)
+int genRand(int low, int high) {
+	if(high == 0) {
+		return 0;
+	}
+	int temp = rand % high;
+	
+}
+*/
+
+/*
+//generates a random number between [low, high]
+int genRand(int low, int high) {
+	int divisor = RAND_MAX / (high + 1);
+	int retval;
+	do{
+		retval = rand() / divisor;
+	} while (reval > high);
+	
+	return high + low;
+}
+*/
+
+
+/*
+//generates a random number between [low, high]
+int genRand(int low, int high) {
+  unsigned short lfsr = 0xACE1u;
+  unsigned bit;
+  bit  = ((lfsr >> 0) ^ (lfsr >> 2) ^ (lfsr >> 3) ^ (lfsr >> 5) ) & 1;
+  lfsr =  (lfsr >> 1) | (bit << 15);
+  return lfsr % (high + 1) + low;
+}
+*/
+
+//my own delay function
+void delay(unsigned int mseconds) {
+	clock_t goal = mseconds + clock();
+	while(goal > clock());
+}
 
 //compares two ints and prints PASS if equal, FAIL otherwise
 void checkEqual(int i, int j) {
@@ -178,7 +231,7 @@ int main() {
 int main() {
 	printf("TESTING adventurer card:\n");
 	//p = current player
-	int i = 0, p = 0;
+	int i = 0, p = 0, j = 0;
 	int numPlayers = 2;
 	//treasureXXXCount refers to the number of treasure cards in XXX
 	int deckCount, discardCount, handCount, treasureDeckCount, treasureDiscardCount, treasureHandCount, treasureType;
@@ -203,6 +256,8 @@ int main() {
 	 * number of treasure cards in hand/deck/discard
 	 * number of cards in deck/discard
 	 */
+	 
+	/*
 	for(p = 0; p < 2; p++) {
 		int nextPlayer = !p;
 		for (deckCount = 0; deckCount < 5; deckCount++) {
@@ -216,6 +271,64 @@ int main() {
 			//clear game state
 			memset(&state, 0, sizeof(struct gameState));
 			initializeGame(2, k, randseed, &state);
+			
+			state.deckCount[p] = deckCount;
+			//fill deck with given number and type of treasure cards
+			memset(state.deck[p], treasureType, sizeof(int) * treasureDeckCount);
+			//fill the rest of the deck with estates
+			for(i = treasureDeckCount - 1; i < deckCount; i++) {
+				state.deck[p][i] = estate;
+			}
+			state.discardCount[p] = discardCount;
+			//fill the discard deck with given number and type of treasure cards
+			memset(state.discard[p], treasureType, sizeof(int) * treasureDiscardCount);
+			//fill the rest of the discard with estates
+			for(i = treasureDiscardCount - 1; i < discardCount; i++) {
+				state.discard[p][i] = estate;
+			}
+			state.handCount[p] = handCount;
+			//fill the hand with the given number and type of treasure cards
+			memset(state.hand[p], treasureType, sizeof(int) * treasureHandCount);
+			//fill the rest of the hand with estates
+			for(i = treasureHandCount - 1; i < handCount; i++) {
+				state.hand[p][i] = estate;
+			}
+			//add village to currentPlayer's hand
+			state.handCount[p]++;
+			handpos = state.handCount[p] - 1;
+			state.hand[p][handpos] = adventurer; //add it to the end of the hand to keep treasure count accurate
+			//make a copy of the game state
+			memcpy(&stateOriginal, &state, sizeof(struct gameState));
+			
+			printf("Testing Gamestate: deckCount = %d, treasureDeckCount = %d, discardCount = %d, treasureDiscardCount = %d\nhandCount = %d, treasureHandCount = %d treasureType = %d\n",
+					stateOriginal.deckCount[p], treasureDeckCount, stateOriginal.discardCount[p], treasureDiscardCount, handCount, treasureHandCount, treasureType);
+			
+			//get ready to play the adventurer card
+			state.whoseTurn = p;
+			state.phase = 0; //action phase
+			playCard(handpos, choice1, choice2, choice3, &state);  //the played adventurer card is discarded!
+		*/
+	
+	
+	srand(time(NULL));
+	
+	for(j = 0; j < 100; j++) {
+			//clear game state
+			memset(&state, 0, sizeof(struct gameState));
+			initializeGame(2, k, randseed, &state);
+			
+			//PutSeed(time(NULL));
+			p = genRand(0, 1);
+			deckCount = genRand(0, 5);
+			treasureDeckCount = genRand(0, deckCount);
+			discardCount = genRand(0, 5);
+			treasureDiscardCount = genRand(0, discardCount);
+			handCount = genRand(1, 5);
+			treasureHandCount = genRand(0, handCount);
+			treasureType = genRand(copper, gold);
+			
+			printf("START Testing Gamestate: deckCount = %d, treasureDeckCount = %d, discardCount = %d, treasureDiscardCount = %d\nhandCount = %d, treasureHandCount = %d treasureType = %d, player = %d\n",
+					deckCount, treasureDeckCount, discardCount, treasureDiscardCount, handCount, treasureHandCount, treasureType, p);
 			
 			state.deckCount[p] = deckCount;
 			//fill deck with given number and type of treasure cards
@@ -240,19 +353,36 @@ int main() {
 			}
 			//add village to currentPlayer's hand
 			state.handCount[p]++;
-			handpos = handCount - 1;
+			handpos = state.handCount[p] - 1;
 			state.hand[p][handpos] = adventurer; //add it to the end of the hand to keep treasure count accurate
 			//make a copy of the game state
 			memcpy(&stateOriginal, &state, sizeof(struct gameState));
 			
-			printf("Testing Gamestate: deckCount = %d, treasureDeckCount = %d, discardCount = %d, treasureDiscardCount = %d\ntreasureType = %d\n",
-					stateOriginal.deckCount[p], treasureDeckCount, stateOriginal.discardCount[p], treasureDiscardCount, treasureType);
+			printf("END Testing Gamestate: deckCount = %d, treasureDeckCount = %d, discardCount = %d, treasureDiscardCount = %d\nhandCount = %d, treasureHandCount = %d treasureType = %d, player = %d\n",
+					stateOriginal.deckCount[p], treasureDeckCount, stateOriginal.discardCount[p], treasureDiscardCount, stateOriginal.handCount[p], treasureHandCount, treasureType, p);
 			
 			//get ready to play the adventurer card
 			state.whoseTurn = p;
 			state.phase = 0; //action phase
+			
 			playCard(handpos, choice1, choice2, choice3, &state);  //the played adventurer card is discarded!
-		
+			
+	
+	}
+	
+	
+	/*
+	int low = 0;
+	int high = 0;
+	for(i = 0; i < 1000; i++) {
+		printf("random number between %d and %d is %d\n", low, high, genRand(low, high));
+		//delay(100000);
+	}
+	*/
+	
+	
+	
+	
 			/*
 			//TEST1: exactly 2 treasure cards drawn
 			int oldNumTreasures = countTreasure(p, &stateOriginal);
@@ -330,7 +460,7 @@ int main() {
 				testFlags[4] = 1;
 			}
 			*/
-					
+/*				
 		} //end treasureType loop
 		} //end treasureHandCount loop
 		} //end treasureDiscardCount loop	
@@ -338,6 +468,7 @@ int main() {
 		} //end treasureDeckCount loop
 		} //end deckCount loop
 	} //end player loop
+*/
 	
 	//test the "number of actions" boundaries
 	
