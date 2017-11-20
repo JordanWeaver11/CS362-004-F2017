@@ -24,21 +24,6 @@ testAll: dominion.o testSuite.c
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 
-runtests: testDrawCard 
-	./testDrawCard &> unittestresult.out
-	gcov dominion.c >> unittestresult.out
-	cat dominion.c.gcov >> unittestresult.out
-
-
-player: player.c interface.o
-	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
-
-testUpdateCoins: testUpdateCoins.c dominion.o rngs.o
-	gcc -o testUpdateCoins -g  testUpdateCoins.c dominion.o rngs.o $(CFLAGS)
-
-cardtest4: cardtest4.c dominion.o rngs.o
-	gcc -o cardtest4 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
-
 unittest1: unittest1.c dominion.o rngs.o
 	gcc -o unittest1 -g  unittest1.c dominion.o rngs.o $(CFLAGS)
 
@@ -54,77 +39,87 @@ unittest4: unittest4.c dominion.o rngs.o
 cardtest1: cardtest1.c dominion.o rngs.o
 	gcc -o cardtest1 -g  cardtest1.c dominion.o rngs.o $(CFLAGS)
 
-
 cardtest2: cardtest2.c dominion.o rngs.o
 	gcc -o cardtest2 -g  cardtest2.c dominion.o rngs.o $(CFLAGS)
 
 cardtest3: cardtest3.c dominion.o rngs.o
 	gcc -o cardtest3 -g  cardtest3.c dominion.o rngs.o $(CFLAGS)
 
-cardtest44: cardtest44.c dominion.o rngs.o
-	gcc -o cardtest44 -g  cardtest44.c dominion.o rngs.o $(CFLAGS)
+cardtest4: cardtest4.c dominion.o rngs.o
+	gcc -o cardtest4 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
 
-unittestresults.out: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c cardtest2.c cardtest3.c cardtest4.c 
-	make rngs.o
-	make dominion.o
-	
-	echo "Result for running unit tests:" > unittestresults.out
+randomtestcard1: randomtestcard1.c dominion.o rngs.o
+	gcc -o randomtestcard1 -g  randomtestcard1.c dominion.o rngs.o $(CFLAGS)
 
-	echo "unittest1.c:" >> unittestresults.out	
-	unittest1 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out
-	
+randomtestcard2: randomtestcard2.c dominion.o rngs.o
+	gcc -o randomtestcard2 -g  randomtestcard2.c dominion.o rngs.o $(CFLAGS)
 
-	echo "unittest2.c:" >> unittestresults.out	
-	unittest2 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out	
-	
-	echo "unittest3.c:" >> unittestresults.out
-	unittest3 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out
-	
-	echo "unittest4.c:" >> unittestresults.out
-	unittest4 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out
-	
-	echo "cardtest1.c:" >> unittestresults.out
-	cardtest1 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out
-	
-	echo "cardtest2.c:" >> unittestresults.out
-	cardtest2 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out
-	
-	echo "cardtest3.c:" >> unittestresults.out
-	cardtest3 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out
-	
-	echo "cardtest4.c:" >> unittestresults.out
-	cardtest4 >> unittestresults.out
-	gcov -f -b dominion.c >> unittestresults.out
-	
-dotests: 
-	./ct1
-	./ct2
-	./ct3
-	./ct4
-	./ut1
-	./ut2
-	./ut3
-	./ut4
-	
-dotestsgcov:
-	gcov -f -b unittest1.c
-	gcov -f -b unittest2.c
-	gcov -f -b unittest3.c
-	gcov -f -b unittest4.c
-	gcov -f -b cardtest1.c
-	gcov -f -b cardtest2.c
-	gcov -f -b cardtest3.c
-	gcov -f -b cardtest4.c
+randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
+	gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
 
+randomtestcard1.out: randomtestcard1
+	./randomtestcard1 >> randomtestcard1.out
+	gcov dominion.c -b -f >> randomtestcard1.out
+	cat dominion.c.gcov >> randomtestcard1.out
+	rm -f dominion.gcda
 
-all: playdom player testDrawCard testBuyCard badTestDrawCard testUpdateCoins cardtest4 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 unittestresults.out 
+randomtestcard2.out: randomtestcard2
+	./randomtestcard2 >> randomtestcard2.out
+	gcov dominion.c -b -f >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard2.out
+	rm -f dominion.gcda
+
+randomtestadventurer.out: randomtestadventurer
+	./randomtestadventurer >> randomtestadventurer.out
+	gcov dominion.c -b -f >> randomtestadventurer.out
+	cat dominion.c.gcov >> randomtestadventurer.out
+	rm -f dominion.gcda
+
+unittestresults.out: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
+	./unittest1 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+	
+	./unittest2 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+	
+	./unittest3 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+	
+	./unittest4 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+	
+	./cardtest1 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+	
+	./cardtest2 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+	
+	./cardtest3 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+	
+	./cardtest4 >> unittestresults.out
+	gcov dominion.c -b -f >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
+	rm -f dominion.gcda
+
+player: player.c interface.o
+	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
+
+all: playdom player testDrawCard testBuyCard badTestDrawCard unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 randomtestcard1 randomtestcard2 randomtestadventurer
 
 clean:
-	rm -f *.o playdom.exe playdom player cardtest1 cardtest2 cardtest3 cardtest4 unittest1 unittest2 unittest3 unittest4 player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 randomtestcard1 randomtestcard2 randomtestadventurer

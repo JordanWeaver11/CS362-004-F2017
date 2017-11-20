@@ -4,77 +4,97 @@
 #include <stdio.h>
 #include <assert.h>
 #include "rngs.h"
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
+/*
+ * unittest4 tests the fullDeckCount() function.
+ * fullDeckCount() counts the number of a specific card in a specific player's
+ * hand, deck, and discard pile.
+ * 
+int fullDeckCount(int player, int card, struct gameState *state) {
+  int i;
+  int count = 0;
 
-int main(){
-        struct gameState realGame, testGame;
-        int result;
-        int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
-                        sea_hag, tribute, smithy};
+  for (i = 0; i < state->deckCount[player]; i++)
+    {
+      if (state->deck[player][i] == card) count++;
+    }
 
-        int count=0;
-        int players=2;
-        int rand=1000;
-        int expected=10;
+  for (i = 0; i < state->handCount[player]; i++)
+    {
+      if (state->hand[player][i] == card) count++;
+    }
 
-/*Here is the test for the function is game over *****************/
-initializeGame(players, k, rand, &realGame);
+  for (i = 0; i < state->discardCount[player]; i++)
+    {
+      if (state->discard[player][i] == card) count++;
+    }
 
-/*now we cope the game to our test struct type */
-/*so we dont need to initilize more than one time*/
+  return count;
+}
+*/
 
-
-memcpy(&testGame, &realGame, sizeof(struct gameState));
-
- printf(" This Test Is to TEST The function ( whoseTurn ) : \n");
-
-printf("The test is set to see if the function whoesTurn have no bugs, so i will set the turns manually to see whos turn \n");
-
-printf(" \n \n **********The test begin here*************\n");
-
-printf("whoes turn when the gsme is initilized \n");
-
-result =whoseTurn(&testGame);
-
-printf("Result= %d , expected result = 0 \n", result);
-if (result==0){
-
-	count++;
+//compares two ints and prints PASS if equal, FAIL otherwise
+void checkEqual(int i, int j) {
+	if(i == j) {
+		printf("PASS: ");
+	}
+	else {
+		printf("FAIL: ");
+	}
 }
 
-
-
-printf("*****************************************************");
-printf("\n now we will set the turn maunaly for the second player \n");
-memcpy(&testGame, &realGame, sizeof(struct gameState));
-
-testGame.whoseTurn++;
-
-result =whoseTurn(&testGame);
-
-printf("Result= %d , expected result = 1 \n", result);
-if (result==1){
-
-        count++;
-}
-
-
-
-if(count==2){
-
-	printf(" The TEST PASSED test's two conditions \n ");
-
-}
-
-else{
-
-	printf(" The TEST Failed \n");
-
-}
-
-
-
-return 0;
+int main() {
+	int numPlayers = 2;
+	int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
+	struct gameState state;
+	int randseed = 100;
+	//initialize everything in a base gamestate
+	initializeGame(numPlayers, k, randseed, &state);
+	printf("TESTING fullDeckCount():\n");
+	
+	//if boundary cases pass for 1 type of card, then it should pass for all other types of cards.
+	int i = 0;
+	int player = 0;
+	//test 1: card cound == 0
+	//fill deck and hand with adventurer
+	for (i = 0; i < state.deckCount[player]; i++) {
+		state.deck[player][i] = adventurer;
+    }
+	for (i = 0; i < state.handCount[player]; i++) {
+		state.hand[player][i] = adventurer;
+    }
+    //check for council_room
+    checkEqual(fullDeckCount(player, council_room, &state), 0);
+    printf("deck contains %d council_room, expected %d\n", fullDeckCount(player, council_room, &state), 0);
+	
+	
+	//test 2: card count == 1, 1 in deck, 0 in hand, 0 in discard
+	state.deck[player][0] = council_room;
+    //check for council_room
+    checkEqual(fullDeckCount(player, council_room, &state), 1);
+    printf("deck contains %d council_room, expected %d\n", fullDeckCount(player, council_room, &state), 1);
+    
+    //test 3: card count == 1, 0 in deck, 1 in hand, 0 in discard
+    state.deck[player][0] = adventurer;
+    state.hand[player][0] = council_room;
+    //check for council_room
+    checkEqual(fullDeckCount(player, council_room, &state), 1);
+    printf("deck contains %d council_room, expected %d\n", fullDeckCount(player, council_room, &state), 1);
+    
+    //test4: card count == 1, 0 in deck, 0 in hand, 1 in discard
+    state.hand[player][0] = adventurer;
+    state.discardCount[player] += 1;
+    state.discard[player][0] = council_room;
+    //check for council_room
+    checkEqual(fullDeckCount(player, council_room, &state), 1);
+    printf("deck contains %d council_room, expected %d\n", fullDeckCount(player, council_room, &state), 1);
+    
+    //test5: card count == 3, 1 in deck, 1 in hand, 1 in discard
+    state.hand[player][0] = council_room;
+    state.deck[player][0] = council_room;
+    //check for council_room
+    checkEqual(fullDeckCount(player, council_room, &state), 3);
+    printf("deck contains %d council_room, expected %d\n", fullDeckCount(player, council_room, &state), 3);
+    
+	printf("DONE testing fullDeckCount\n\n");
+	return 0;
 }

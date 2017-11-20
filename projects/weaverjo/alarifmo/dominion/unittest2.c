@@ -4,86 +4,51 @@
 #include <stdio.h>
 #include <assert.h>
 #include "rngs.h"
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
 
-int main(){
-        struct gameState realGame, testGame;
-        int result;
-        int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
-                        sea_hag, tribute, smithy};
+/*
+ * unittest2 tests function whoseTurn()
+int whoseTurn(struct gameState *state) {
+  return state->whoseTurn;
+}
+*/
 
+//compares two ints and prints PASS if equal, FAIL otherwise
+void checkEqual(int i, int j) {
+	if(i == j) {
+		printf("PASS: ");
+	}
+	else {
+		printf("FAIL: ");
+	}
+}
 
-        int players=2;
-        int rand=1000;
-        int expected=10;
-
-/*Here is the test for the function is game over *****************/
-initializeGame(players, k, rand, &realGame);
-
-/*now we cope the game to our test struct type */
-/*so we dont need to initilize more than one time*/
-
-
-memcpy(&testGame, &realGame, sizeof(struct gameState));
-
- printf(" This Test Is to TEST The function ( numHandCards ) : \n");
-
- printf("*********************************************************************************\n");
-
- printf("test when put the number of cards in hand =10 \n");
-
-
-//testGame.handCount[0]=10;
-
-	result= numHandCards(&testGame);
-
-	if( result==10){
-
-		printf("result =%d expected result is = %d \n", result, expected);
-
-		printf(" THE TEST PASS\n");
-
+int main() {
+	int numPlayers = 2;
+	int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
+	struct gameState state;
+	int randseed = 100;
+	//initialize everything in a base gamestate
+	initializeGame(numPlayers, k, randseed, &state);
 	
-	}
+	printf("TESTING whoseTurn():\n");
+	//manually change whose turn it is
+	//boundary of whoseTurn == 0
+	state.whoseTurn = 0;  //player1's turn
+	//print pass or fail
+	checkEqual(whoseTurn(&state), 0);
+	//print useful debugging information
+	printf("Player%d turn, expected Player%d turn\n", whoseTurn(&state), 0);
+	
+	//boundary of whoseTurn > 0
+	//boundary of whoseTurn == 0
+	state.whoseTurn = 1;  //player2's turn
+	//print pass or fail
+	checkEqual(whoseTurn(&state), 1);
+	//print useful debugging information
+	printf("Player%d turn, expected Player%d turn\n", whoseTurn(&state), 1);
+	
+	//This class never goes past 2 players, so those are sufficient test cases
 
-	else{
-
-		 printf("result =%d expected result is = %d \n", result, expected);
-
-                printf(" THE TEST FAIL\n");
-
-
-
+	printf("DONE testing whoseTurn()\n\n");
+	return 0;
 }
-/*****************************************************************/
-printf("test when put the number of cards in hand =5 as it initilized \n");
-
-initializeGame(players, k, rand, &realGame);
-memcpy(&testGame, &realGame, sizeof(struct gameState));
-
- result= numHandCards(&testGame);
-
-        if( result==5){
-
-                printf("result =%d expected result is = 5 \n", result);
-
-                printf(" THE TEST PASS\n");
-
-
-        }
-
-        else{
-
-                 printf("result =%d expected result is =5 \n", result);
-
-                printf(" THE TEST FAIL\n");
-
-
-
-	}
-
-return 0;
-}
-

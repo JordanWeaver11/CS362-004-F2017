@@ -4,160 +4,109 @@
 #include <stdio.h>
 #include <assert.h>
 #include "rngs.h"
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
 
-int main(){
-        struct gameState realGame, testGame;
-        int result;
-        int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
-                        sea_hag, tribute, smithy};
+/*
+ * unitttest3 tests isGameOver() function
+int isGameOver(struct gameState *state) {
+  int i;
+  int j;
+	
+  //if stack of Province cards is empty, the game ends
+  if (state->supplyCount[province] == 0)
+    {
+      return 1;
+    }
 
-	int count=0;
-        int players=2;
-        int rand=1000;
-        int expected=10;
+  //if three supply pile are at 0, the game ends
+  j = 0;
+  for (i = 0; i < 25; i++)
+    {
+      if (state->supplyCount[i] == 0)
+	{
+	  j++;
+	}
+    }
+  if ( j >= 3)
+    {
+      return 1;
+    }
 
-/*Here is the test for the function is game over *****************/
-initializeGame(players, k, rand, &realGame);
+  return 0;
+}
+*/
 
-/*now we cope the game to our test struct type */
-/*so we dont need to initilize more than one time*/
-
-
-memcpy(&testGame, &realGame, sizeof(struct gameState));
-
- printf(" This Test Is to TEST The function ( getCoast ) : \n");
-
- printf("*********************************************************************************\n");
-
- printf("i will pick 10 random cards and use the function to get their result, and we wil compare it to the real coast of the card. If they are equal then the function pased the test  \n");
-
-printf("\n");
-
- printf("Card is (smithy) \n");
- result=getCost(smithy);
-printf("card result = %d, espected= 4 \n",result);
-if (result==4){ count++;
-
+//compares two ints and prints PASS if equal, FAIL otherwise
+void checkEqual(int i, int j) {
+	if(i == j) {
+		printf("PASS: ");
+	}
+	else {
+		printf("FAIL: ");
+	}
 }
 
-printf("\n");
-
-
- printf("Card is (estate) \n");
- result=getCost(estate);
-printf("card result = %d, espected= 2 \n",result);
-if (result==2){ count++;
-
+int main() {
+	int numPlayers = 2;
+	int k[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall};
+	struct gameState state;
+	int randseed = 100;
+	//initialize everything in a base gamestate
+	initializeGame(numPlayers, k, randseed, &state);
+	printf("TESTING isGameOver():\n");
+	/* Realistically, none of the supply cards should ever become negative.
+	 * So I and only going to test positive and 0 boundary conditions.
+	 */
+	
+	//manually set province and supply card values because they are used in isGameOver()
+	int i = 0;
+	
+	//boundary where province > 0, but 3 supply cards == 0
+	for(i = 0; i < smithy + 1; i++) {
+		state.supplyCount[i] = 8;
+	}
+	state.supplyCount[village] = 0;
+	state.supplyCount[baron] = 0;
+	state.supplyCount[great_hall] = 0;
+	checkEqual(isGameOver(&state), 1);
+	printf("Province > 0, 3 supply cards == 0. Game over %d, expected Game over %d\n", isGameOver(&state), 1);
+	
+	//boundary where province == 0, but 3 supply cards > 0
+	for(i = 0; i < great_hall + 1; i++) {
+		state.supplyCount[i] = 8;
+	}
+	state.supplyCount[province] = 0;
+	checkEqual(isGameOver(&state), 1);
+	printf("Province == 0, 3 supply cards > 0. Game over %d, expected Game over %d\n", isGameOver(&state), 1);
+	
+	//boundary where province > 0, but 1 supply cards == 0
+	for(i = 0; i < baron + 1; i++) {
+		state.supplyCount[i] = 8;
+	}
+	state.supplyCount[great_hall] = 0;
+	checkEqual(isGameOver(&state), 0);
+	printf("Province > 0, 1 supply cards == 0. Game over %d, expected Game over %d\n", isGameOver(&state), 0);
+	
+	/*make sure isGameOver() only checks the used kingdom cards
+	 * use ambassador instead of great_hall
+	 */
+	int k2[10] = {adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, ambassador};
+	struct gameState state2;
+	//initialize everything in a new gamestate for ease
+	initializeGame(numPlayers, k2, randseed, &state2);
+	//province > 0, and used supply cards > 0, 3 unused supply cards == 0
+	for(i = 0; i < baron + 1; i++) {
+		state2.supplyCount[i] = 8;
+	}
+	state2.supplyCount[ambassador] = 8;
+	//set 3 unused supply cards to 0
+	state2.supplyCount[great_hall] = 0;
+	state2.supplyCount[minion] = 0;
+	state2.supplyCount[steward] = 0;
+	
+	checkEqual(isGameOver(&state), 0);
+	printf("Province > 0, 3 used supply cards > 0, 3 unused supply cards == 0.\n");
+	printf("   Game over %d, expected Game over %d\n", isGameOver(&state), 0);
+	
+	printf("DONE testing isGameOver()\n\n");
+	return 0;
 }
-
-printf("\n");
-
-
-
-
- printf("Card is (minion) \n");
- result=getCost(minion);
-printf("card result = %d, espected= 5 \n",result);
-if (result==5){ count++;
-
-}
-
-printf("\n");
-
-
-
-
- printf("Card is (baron) \n");
- result=getCost(baron);
-printf("card result = %d, espected= 4 \n",result);
-if (result==4){ count++;
-
-}
-
-printf("\n");
-
-
-
-
- printf("Card is (embargo) \n");
- result=getCost(embargo);
-printf("card result = %d, espected= 2 \n",result);
-if (result==2){ count++;
-
-}
-
-printf("\n");
-
-
-
- printf("Card is (treasure_map) \n");
- result=getCost(treasure_map);
-printf("card result = %d, espected= 4 \n",result);
-if (result==4){ count++;
-
-}
-
-printf("\n");
-
-
-
- printf("Card is (salvager) \n");
- result=getCost(salvager);
-printf("card result = %d, espected= 4 \n",result);
-if (result==4){ count++;
-
-}
-
-printf("\n");
-
-
-
- printf("Card is (duchy) \n");
- result=getCost(duchy);
-printf("card result = %d, espected= 5 \n",result);
-if (result==5){ count++;
-
-}
-
-printf("\n");
-
-
- printf("Card is (gold) \n");
- result=getCost(gold);
-printf("card result = %d, espected= 6 \n",result);
-if (result==6){ count++;
-
-}
-
-printf("\n");
-
-
- printf("Card is (mine) \n");
- result=getCost(mine);
-printf("card result = %d, espected= 5 \n",result);
-if (result==5){ count++;
-
-}
-
-printf("\n");
-
-
-if(count==10){
-
-	printf(" THE TEST PASSES \n");
-
-}
-
-else{
-
- printf(" THE TEST FAIL \n");
-
-
-}
-
-return 0;
-}
-

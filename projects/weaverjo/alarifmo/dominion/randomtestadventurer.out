@@ -1,0 +1,3 @@
+TESTING adventurer card:
+START Testing Gamestate: deckCount = 0, treasureDeckCount = 0, discardCount = 4, treasureDiscardCount = 4
+handCount = 4, treasureHandCount = 4 treasureType = 6, player = 1
