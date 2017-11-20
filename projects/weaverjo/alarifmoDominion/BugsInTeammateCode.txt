@@ -1,0 +1,83 @@
+//adapted from Hilton Lipschitz's "How to write a good bug report" blog
+//http://noverse.com/blog/2012/06/how-to-write-a-good-bug-report/
+
+Title:	Bugs in Teammate Code
+
+Date:			11/19/2017
+Reported By:	Jordan Weaver
+
+Code Tested: dominion.c
+----------------------------------
+----------------------------------
+
+==================================
+BUG1: Draws 2 cards instead of 3
+
+Dominion Function:	smithy_function()
+Test File:			cardtest1.c
+
+Is it reproducible: Yes
+
+Description
+===========
+Played the smithy card. Expected to draw 3 cards, but only drew 2.
+A loop counter in the smithy_function must be set to 2 instead of 3.
+
+
+Steps to Produce/Reproduce
+--------------------------
+I initialized the game, put the smithy card in the player's hand,
+and called the playCard() function on the smithy card. Then I 
+subtracted the old number of cards in the current player's hand from
+the new number of cards in the current player's hand. See cardtest1.c 
+for more specific game initialization.
+
+
+Expected Results
+----------------
+The current player should have 3 new cards in his hand.
+
+
+Actual Results
+--------------
+The current player has only 2 cards in his hand.
+
+
+Workarounds
+-----------
+No workaround, but changing the loop counter on line 1377 of dominion.c
+should fix the problem. Change to i < 3.
+
+=========================================
+BUG2: Draws 1 treasure instead of 2
+
+Dominion Function:	adventure_function()
+Test File:			cardtest2.c
+
+Is it reproducible: Yes
+
+Description
+===========
+Played the adventurer card, expected to draw 2 treasures, but only drew 1.
+A loop counter in the adventure_function must be set to 1 instead of 2.
+
+
+Steps to Produce/Reproduce
+--------------------------
+I initialized the game, put the adventurer card in the current player's hand, 
+and called the playCard() function on the adventurer card. Then I subtracted 
+the old number of treasure cards from the new number of treasure cards in 
+the current player's hand. See cardtest2.c for more specific game initialization.
+
+Expected Results
+----------------
+Expected 2 new treasure cards in the current player's hand.
+
+Actual Results
+--------------
+Only 1 new treasure card in the current player's hand.
+
+Workarounds
+-----------
+No workaround, but changing the loop counter on line 1349 of dominion.c 
+should fix the problem.
