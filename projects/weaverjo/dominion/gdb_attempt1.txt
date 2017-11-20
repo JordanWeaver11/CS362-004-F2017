@@ -1,0 +1,58 @@
+GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from cardtest2...done.
+(gdb) break actAdventurer
+Breakpoint 1 at 0x403f91: file dominion.c, line 650.
+(gdb) run
+Starting program: /home/jordan/Documents/cs362/CS362-004-f2017/projects/weaverjo/dominion/cardtest2 
+TESTING adventurer card:
+
+Breakpoint 1, actAdventurer (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff1000, handPos=0, bonus=0x7fffffff0f60) at dominion.c:650
+650	{
+(gdb) watch drawntreasure
+Hardware watchpoint 2: drawntreasure
+(gdb) continue
+Continuing.
+
+Hardware watchpoint 2: drawntreasure
+
+Old value = 0
+New value = 1
+0x0000000000404149 in actAdventurer (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff1000, handPos=0, bonus=0x7fffffff0f60) at dominion.c:677
+677			  drawntreasure++;
+(gdb) list
+672			  shuffle(currentPlayer, state);
+673			}
+674			drawCard(currentPlayer, state);
+675			cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+676			if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+677			  drawntreasure++;
+678			else{
+679			  temphand[z]=cardDrawn;
+680			  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+681			  z++;
+(gdb) continue
+Continuing.
+
+Watchpoint 2 deleted because the program has left the block in
+which its expression is valid.
+0x0000000000404d78 in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff1000, handPos=0, bonus=0x7fffffff0f60) at dominion.c:892
+892			actAdventurer(card, choice1, choice2, choice3, state, handPos, bonus);
+(gdb) quit
+A debugging session is active.
+
+	Inferior 1 [process 16688] will be killed.
+
+Quit anyway? (y or n) y

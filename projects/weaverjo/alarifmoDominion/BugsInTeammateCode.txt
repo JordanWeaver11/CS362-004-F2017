@@ -80,4 +80,4 @@ Only 1 new treasure card in the current player's hand.
 Workarounds
 -----------
 No workaround, but changing the loop counter on line 1349 of dominion.c 
-should fix the problem.
+should fix the problem. Change to drawnTreasure < 2.

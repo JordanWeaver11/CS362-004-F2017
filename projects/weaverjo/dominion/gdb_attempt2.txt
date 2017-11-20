@@ -1,0 +1,41 @@
+GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from cardtest2...done.
+(gdb) break actAdventurer
+Breakpoint 1 at 0x403f91: file dominion.c, line 650.
+(gdb) run
+Starting program: /home/jordan/Documents/cs362/CS362-004-f2017/projects/weaverjo/dominion/cardtest2 
+TESTING adventurer card:
+
+Breakpoint 1, actAdventurer (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff1000, handPos=0, bonus=0x7fffffff0f60) at dominion.c:650
+650	{
+(gdb) break 670
+Breakpoint 2 at 0x404032: file dominion.c, line 670.
+(gdb) continue
+Continuing.
+FAIL: Number of treasure cards drawn = 3, expected 2
+FAIL: Did we discard all other revealed cards (True/False) = 0, expected 1
+	Total cards discarded = 0, expected 2
+
+Breakpoint 1, actAdventurer (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff1000, handPos=0, bonus=0x7fffffff0f60) at dominion.c:650
+650	{
+(gdb) continue
+Continuing.
+PASS: Were revealed cards shuffled back into the deck (True/False) = 0, expected 0
+FAIL: Was other player's state affected (True/False) = 1, expected 0
+PASS: Were supply cards changed (True/False) = 0, expected 0
+DONE testing adventurer card
+
+[Inferior 1 (process 16802) exited normally]
