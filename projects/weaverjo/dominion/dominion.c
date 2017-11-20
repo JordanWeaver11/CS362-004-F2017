@@ -667,7 +667,7 @@ int actAdventurer(int card, int choice1, int choice2, int choice3, struct gameSt
 	}
 	
 	//adventurer action
-	while(drawntreasure<1){ //FIX ME, change to drawntreasure<2
+	while(drawntreasure<2){ //FIX ME, change to drawntreasure<2
 		if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
 		  shuffle(currentPlayer, state);
 		}
