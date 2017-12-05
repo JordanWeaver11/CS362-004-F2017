@@ -9,3 +9,6 @@
 /UrlValidator.class
 /UrlValidatorTest.class
 /UrlsToVerify.txt
+/test/
+/InValidURLS.txt
+/ValidURLS.txt

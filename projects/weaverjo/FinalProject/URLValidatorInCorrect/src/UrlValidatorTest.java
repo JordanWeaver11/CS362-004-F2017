@@ -17,8 +17,7 @@
 
 
 import junit.framework.TestCase;
-
-
+import java.io.*;
 
 
 
@@ -40,9 +39,49 @@ public class UrlValidatorTest extends TestCase {
    
    public void testManualTest()
    {
-	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-	   System.out.println(urlVal.isValid("http://www.amazon.com"));
+	   //Valid URLS
+	   System.out.println("Testing Valid URLS:");
+	   //error handling
+	   try {
+		   //open the file
+		   InputStream input = this.getClass().getResourceAsStream("ValidURLS.txt");
+		   InputStreamReader fstream = new InputStreamReader(input, "UTF-8");
+		   BufferedReader br = new BufferedReader(fstream);
+		   String strLine = null;
+		   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+		   //read a line from the file into strLine
+		   while ((strLine = br.readLine()) != null) {
+			   //test each line from the file
+			   assertTrue(urlVal.isValid(strLine));
+			   //System.out.println(urlVal.isValid(strLine));
+		   }
+		   //close the file
+		   //fstream.close();
+	   }catch (Exception e) {  //error handling
+		   System.err.println("Error: " + e.getMessage());
+	   }
 	   
+	   //Invalid URLS
+	   System.out.println("Testing Invalid URLS:");
+	   //error handling
+	   try {
+		   //open the file
+		   InputStream input = this.getClass().getResourceAsStream("InValidURLS.txt");
+		   InputStreamReader fstream = new InputStreamReader(input, "UTF-8");
+		   BufferedReader br = new BufferedReader(fstream);
+		   String strLine = null;
+		   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+		   //read a line from the file into strLine
+		   while ((strLine = br.readLine()) != null) {
+			   //test each line from the file
+			   assertFalse(urlVal.isValid(strLine));
+			   //System.out.println(urlVal.isValid(strLine));
+		   }
+		   //close the file
+		   //fstream.close();
+	   }catch (Exception e) {  //error handling
+		   System.err.println("Error: " + e.getMessage());
+	   }
 	   
    }
    
